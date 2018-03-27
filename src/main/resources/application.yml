@@ -1,0 +1,3 @@
+spring:
+  mustache:
+    suffix: .html

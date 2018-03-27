@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+</head>
+<body>
+<h1>채팅방 목록</h1>
+<ul>
+    {{#rooms}}
+    <li><a href="/chat/rooms/{{id}}">{{name}}</a></li>
+    {{/rooms}}
+</ul>
+</body>
+</html>
