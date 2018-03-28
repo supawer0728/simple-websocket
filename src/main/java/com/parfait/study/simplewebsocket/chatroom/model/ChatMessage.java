@@ -1,4 +1,4 @@
-package com.parfait.study.simplewebsocket.chatroom;
+package com.parfait.study.simplewebsocket.chatroom.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

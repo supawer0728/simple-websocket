@@ -1,3 +1,14 @@
 spring:
   mustache:
     suffix: .html
+viewname:
+  chatroom:
+    list: /chat1/rooms
+    detail: /chat1/room-detail
+---
+spring:
+  profiles: stomp
+viewname:
+  chatroom:
+    list: /chat2/rooms
+    detail: /chat2/room-detail

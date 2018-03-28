@@ -1,4 +1,4 @@
-package com.parfait.study.simplewebsocket.chatroom;
+package com.parfait.study.simplewebsocket.chatroom.nostomp.utils;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
