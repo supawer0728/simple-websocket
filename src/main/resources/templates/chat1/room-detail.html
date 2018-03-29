@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>{{room.name}}({{room.id}})</h1>
-<div class="content" data-room-id="{{room.id}}">
+<div class="content" data-room-id="{{room.id}}" data-member="{{member}}">
     <ul class="chat_box">
     </ul>
     <input name="message">
@@ -20,11 +20,12 @@
         var messageInput = $('input[name="message"]');
         var sendBtn = $('.send');
         var roomId = $('.content').data('room-id');
+        var member = $('.content').data('member');
 
         var sock = new SockJS("/ws/chat");
 
         sock.onopen = function () {
-            sock.send(JSON.stringify({chatRoomId: roomId, type: 'JOIN'}));
+            sock.send(JSON.stringify({chatRoomId: roomId, type: 'JOIN', writer: member}));
             sock.onmessage = function (e) {
                 var content = JSON.parse(e.data);
                 chatBox.append('<li>' + content.message + '(' + content.writer + ')</li>')
@@ -33,7 +34,8 @@
 
         sendBtn.click(function () {
             var message = messageInput.val();
-            sock.send(JSON.stringify({chatRoomId: roomId, type: 'CHAT', message: message}));
+            sock.send(JSON.stringify({chatRoomId: roomId, type: 'CHAT', message: message, writer: member}));
+            messageInput.val('');
         });
     });
 </script>

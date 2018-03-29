@@ -2,10 +2,12 @@ package com.parfait.study.simplewebsocket.chatroom.stomp;
 
 import com.parfait.study.simplewebsocket.chatroom.model.ChatMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
+@Profile("stomp")
 @RestController
 public class ChatMessageController {
 

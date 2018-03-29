@@ -2,7 +2,7 @@ package com.parfait.study.simplewebsocket.chatroom.nostomp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parfait.study.simplewebsocket.chatroom.model.ChatMessage;
-import com.parfait.study.simplewebsocket.chatroom.nostomp.service.MessageTypeChatMessageHandlerRouter;
+import com.parfait.study.simplewebsocket.chatroom.model.ChatRoom;
 import com.parfait.study.simplewebsocket.chatroom.repository.ChatRoomRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +19,11 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 public class ChatHandler extends TextWebSocketHandler {
 
     private final ObjectMapper objectMapper;
-    private final MessageTypeChatMessageHandlerRouter chatMessageHandlerRouter;
     private final ChatRoomRepository repository;
 
     @Autowired
-    public ChatHandler(ObjectMapper objectMapper, MessageTypeChatMessageHandlerRouter chatMessageHandlerRouter, ChatRoomRepository chatRoomRepository) {
+    public ChatHandler(ObjectMapper objectMapper, ChatRoomRepository chatRoomRepository) {
         this.objectMapper = objectMapper;
-        this.chatMessageHandlerRouter = chatMessageHandlerRouter;
         this.repository = chatRoomRepository;
     }
 
@@ -36,8 +34,8 @@ public class ChatHandler extends TextWebSocketHandler {
         log.info("payload : {}", payload);
 
         ChatMessage chatMessage = objectMapper.readValue(payload, ChatMessage.class);
-        chatMessage.setWriter(session.getId());
-        chatMessageHandlerRouter.get(chatMessage.getType()).send(chatMessage, repository.getChatRoom(chatMessage.getChatRoomId()), session);
+        ChatRoom chatRoom = repository.getChatRoom(chatMessage.getChatRoomId());
+        chatRoom.handleMessage(session, chatMessage, objectMapper);
     }
 
     @Override

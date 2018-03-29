@@ -1,7 +1,11 @@
 package com.parfait.study.simplewebsocket.chatroom.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.parfait.study.simplewebsocket.chatroom.nostomp.utils.MessageSendUtils;
 import lombok.Getter;
 import lombok.NonNull;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.HashSet;
@@ -21,8 +25,27 @@ public class ChatRoom {
         return created;
     }
 
-    public void add(WebSocketSession session) {
+    public void handleMessage(WebSocketSession session, ChatMessage chatMessage, ObjectMapper objectMapper) {
+
+        if (chatMessage.getType() == MessageType.JOIN) {
+            join(session);
+            chatMessage.setMessage(chatMessage.getWriter() + "님이 입장했습니다.");
+        }
+        
+        send(chatMessage, objectMapper);
+    }
+
+    private void join(WebSocketSession session) {
         sessions.add(session);
+    }
+
+    private void send(ChatMessage chatMessage, ObjectMapper objectMapper) {
+        try {
+            TextMessage message = new TextMessage(objectMapper.writeValueAsString(chatMessage));
+            sessions.parallelStream().forEach(session -> MessageSendUtils.sendMessage(session, message));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
     public void remove(WebSocketSession target) {
