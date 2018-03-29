@@ -23,12 +23,10 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-mustache')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-websocket')
-
 
     compile('org.webjars.bower:jquery:3.3.1')
     compile('org.webjars:sockjs-client:1.1.2')
