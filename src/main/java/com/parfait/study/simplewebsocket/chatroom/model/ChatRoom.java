@@ -39,9 +39,9 @@ public class ChatRoom {
         sessions.add(session);
     }
 
-    private void send(ChatMessage chatMessage, ObjectMapper objectMapper) {
+    private <T> void send(T messageObject, ObjectMapper objectMapper) {
         try {
-            TextMessage message = new TextMessage(objectMapper.writeValueAsString(chatMessage));
+            TextMessage message = new TextMessage(objectMapper.writeValueAsString(messageObject));
             sessions.parallelStream().forEach(session -> MessageSendUtils.sendMessage(session, message));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e.getMessage(), e);
